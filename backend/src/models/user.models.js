@@ -31,10 +31,10 @@ const userSchema = new  Schema({
         enum : ["buyer" , "seller"],
         default : "buyer"
     },
-    // isSeller :{
-    //     type : Boolean,
-    //     default : false
-    // },
+    isSeller :{
+        type : Boolean,
+        default : false
+    },
 
 } , {timestamps : true})
 

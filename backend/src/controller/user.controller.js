@@ -5,7 +5,7 @@ import {User} from '../models/user.models.js';
 
 // register user controller
 export const resgisterUser = asyncHandler ( async ( req , res) =>{
-    const {fullname ,email,password ,contact ,role} = req.body;
+    const {fullname ,email,password ,contact ,role,isSeller} = req.body;
     
     // check if user already exist
     const userExist = await User.findOne({
@@ -30,7 +30,8 @@ export const resgisterUser = asyncHandler ( async ( req , res) =>{
         email,
         password,
         contact,
-        role : role === 'seller' ? 'seller' : "buyer"
+        role : role === 'seller' ? 'seller' : "buyer" || "buyer",
+        isSeller : role === 'seller' ? true : false || false
      });
 
     const createdUser = await User.findById(user._id).select("-password");
