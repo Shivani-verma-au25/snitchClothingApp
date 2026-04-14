@@ -1,4 +1,7 @@
 import mongoose, {Schema} from "mongoose"
+import  bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import {config} from "../configrations/config.js"
 
 
 const userSchema = new  Schema({
@@ -35,5 +38,26 @@ const userSchema = new  Schema({
 
 } , {timestamps : true})
 
+
+
+userSchema.pre('save' , async function (){
+    if(!this.isModified('password')) return;
+    return this.password = await bcrypt.hash(this.password)
+});
+
+
+userSchema.methods.comparePassword = async function (password){
+    if(!password) return console.log("passowrd is required");
+    return await bcrypt.compare(password , this.paswword);
+}
+
+userSchema.methods.generateAccessToken = function (){
+    return jwt.sign({
+        _id : this._id,
+        email:this.email,
+        role: this.role},
+        config.ACCESS_TOKEN_SECRET , {expiresIn : config.ACCESS_TOKEN_EXPIRE}
+    )
+}
 
 export const User = mongoose.model("User",userSchema)
