@@ -31,10 +31,10 @@ const userSchema = new  Schema({
         enum : ["buyer" , "seller"],
         default : "buyer"
     },
-    isSeller :{
-        type : Boolean,
-        default : false
-    },
+    // isSeller :{
+    //     type : Boolean,
+    //     default : false
+    // },
 
 } , {timestamps : true})
 
@@ -42,7 +42,7 @@ const userSchema = new  Schema({
 
 userSchema.pre('save' , async function (){
     if(!this.isModified('password')) return;
-    return this.password = await bcrypt.hash(this.password)
+    return this.password = await bcrypt.hash(this.password ,10);
 });
 
 
@@ -52,10 +52,12 @@ userSchema.methods.comparePassword = async function (password){
 }
 
 userSchema.methods.generateAccessToken = function (){
-    return jwt.sign({
-        _id : this._id,
-        email:this.email,
-        role: this.role},
+    return jwt.sign(
+        {
+            _id : this._id,
+            email:this.email,
+            role: this.role
+        },
         config.ACCESS_TOKEN_SECRET , {expiresIn : config.ACCESS_TOKEN_EXPIRE}
     )
 }

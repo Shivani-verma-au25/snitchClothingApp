@@ -20,5 +20,17 @@ app.use(morgan('combined'));
 
 // import routes 
 
+import authRouter from './routers/auth.routers.js';
+// use routes
+app.use('/api/v1/auth',authRouter);
+
+
+// health check route
+app.get('/health-check',(req, res) =>{
+    return res.status(200).json({
+        message : 'health check successfull.'
+    })
+})
+
 
 export {app};
