@@ -1,61 +1,38 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router";
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
-const Register = () => {
-  const { handleRegister } = useAuth();
-  const { loading, error } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+const Login = () => {
+    const { loading, error } = useSelector((state) => state.auth);
+      const navigate = useNavigate();
+    
+      const [showPassword, setShowPassword] = useState(false);
+      const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+      });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    contactNumber: "",
-    password: "",
-    isSeller: false,
-  });
+     const [mounted, setMounted] = useState(false);
+    
+      useEffect(() => {
+        setMounted(true);
+      }, []);
 
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+      const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:value,
     }));
   };
 
-  const handleSubmit = async (e) => {
+
+      const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await handleRegister({
-      fullname: formData?.fullname,
-      email: formData?.email,
-      password: formData?.password,
-      contact: formData?.contactNumber,
-      isSeller: formData?.isSeller,
-    });
-
-    if (data.success) {
-      navigate("/");
-    } else {
-      console.log("error from gegister page", data?.errors);
-    }
-
-    setFormData({
-      fullname: "",
-      email: "",
-      contactNumber: "",
-      password: "",
-      isSeller: false,
-    });
+        console.log("login user");
+        
   };
-
   return (
     <>
       <style>
@@ -129,13 +106,13 @@ const Register = () => {
                 snitch.
               </h1>
               <p className="mt-3 text-[0.65rem] uppercase tracking-[0.2em] text-[#888594]">
-                create your account
+                Sign in to your account and curate your fashion journey with us.
               </p>
             </div>
 
             <div className="mb-10 hidden lg:block animate-fade-up">
               <h2 className="text-3xl font-light text-white mb-2">
-                Create Account
+                Create your account
               </h2>
               <p className="text-[#888594] text-[0.85rem] tracking-wide">
                 Join our exclusive fashion community today.
@@ -143,32 +120,7 @@ const Register = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-              {/* Full Name */}
-              <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
-                <label
-                  htmlFor="fullName"
-                  className="text-[0.65rem] font-medium tracking-[0.1em] uppercase text-[#CAC4D1] ml-1"
-                >
-                  Full Name
-                </label>
-                <div className="relative input-focus-ring rounded-xl transition-all duration-300 border border-[#2a2930] bg-[#1a1a1f]/80 backdrop-blur-sm overflow-hidden group">
-                  <input
-                    id="fullname"
-                    name="fullname"
-                    type="text"
-                    placeholder="Jane Doe"
-                    value={formData.fullname}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3.5 bg-transparent text-sm text-[#E4E1E7] placeholder-[#575560] outline-none group-hover:bg-[#202026]/50 transition-colors"
-                    autoComplete="off"
-                  />
-                </div>
-              </div>
-
-              {error?.fullname && (
-                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up  flex items-center gap-1">{error?.fullname}</p>
-              )}
-
+            
               {/* Email */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
                 <label
@@ -189,35 +141,11 @@ const Register = () => {
                     autoComplete="off"
                   />
                 </div>
-              </div>
-              {error?.email && (
+                {error?.email && (
                   <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.email}</p>
               )}
-
-              {/* Contact Number */}
-              <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
-                <label
-                  htmlFor="contactNumber"
-                  className="text-[0.65rem] font-medium tracking-[0.1em] uppercase text-[#CAC4D1] ml-1"
-                >
-                  Contact Number
-                </label>
-                <div className="relative input-focus-ring rounded-xl transition-all duration-300 border border-[#2a2930] bg-[#1a1a1f]/80 backdrop-blur-sm overflow-hidden group">
-                  <input
-                    id="contactNumber"
-                    name="contactNumber"
-                    type="tel"
-                    placeholder="+91 98765 43210"
-                    value={formData.contactNumber}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3.5 bg-transparent text-sm text-[#E4E1E7] placeholder-[#575560] outline-none group-hover:bg-[#202026]/50 transition-colors"
-                    autoComplete="off"
-                  />
-                </div>
               </div>
-              {error?.contact && (
-                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.contact}</p>
-              )}
+              
 
               {/* Password */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-200">
@@ -278,68 +206,12 @@ const Register = () => {
                     )}
                   </button>
                 </div>
-              </div>
-              {error?.password && (
+                {error?.password && (
                   <p className="px-1 py-1 rounded-xl text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.password}</p>
               )}
-
-              {/* Is Seller Checkbox area */}
-              <div className="mt-2 flex items-center justify-between p-4 rounded-xl border border-[#2a2930] bg-[#151519] animate-fade-up delay-200 hover:border-[#383642] transition-colors">
-                <div>
-                  <h3 className="text-[#E4E1E7] text-[0.85rem] tracking-wide font-medium">
-                    Selling on Snitch?
-                  </h3>
-                  <p className="text-[#888594] text-[0.7rem] mt-0.5">
-                    Enable this to list your own products
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  name="isSeller"
-                  checked={formData.isSeller}
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      isSeller: !prev.isSeller,
-                    }))
-                  }
-                  className={`relative w-12 h-6 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#C9B8FF] focus:ring-offset-2 focus:ring-offset-[#0d0d0f] ${
-                    formData.isSeller ? "bg-[#C9B8FF]" : "bg-[#2a2930]"
-                  }`}
-                >
-                  <div
-                    className={`absolute top-[2px] left-[2px] w-5 h-5 rounded-full transition-all duration-300 ease-in-out shadow-sm ${
-                      formData.isSeller
-                        ? "transform translate-x-6 bg-[#2a2054]"
-                        : "bg-[#CAC4D1]"
-                    }`}
-                  />
-                </button>
               </div>
-
-              {/* {error && typeof error === "object" && (
-                <div className="px-1 py-3 rounded-xl bg-[#2a1315] border border-[#5c2428] text-[#ffb4ab] text-xs animate-fade-up mt-1 flex items-center gap-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                  </svg>
-                  {Object.values(error).map((err, i) => (
-                    <p key={i}>{err}</p>
-                  ))}
-                </div>
-              )} */}
-
+              
+              
               {/* {error && (
                 <div className="px-4 py-3 rounded-xl bg-[#2a1315] border border-[#5c2428] text-[#ffb4ab] text-sm animate-fade-up mt-1 flex items-center gap-2">
                   <svg
@@ -402,19 +274,19 @@ const Register = () => {
                     Processing...
                   </span>
                 ) : (
-                  "Create Account"
+                  "Sign In"
                 )}
               </button>
             </form>
 
             <div className="mt-10 text-center animate-fade-up delay-300">
               <p className="text-[0.8rem] text-[#888594]">
-                Already have an account?{" "}
+                don't have an account?{" "}
                 <a
-                  href="/login"
+                  href="/register"
                   className="text-[#6954ae] hover:text-[#E3D8FF] hover:underline underline-offset-4 transition-all duration-200"
                 >
-                  Sign in instead
+                  Sign up instead
                 </a>
               </p>
             </div>
@@ -423,6 +295,6 @@ const Register = () => {
       </div>
     </>
   );
-};
+}
 
-export default Register;
+export default Login
