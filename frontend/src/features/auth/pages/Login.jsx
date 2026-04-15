@@ -112,7 +112,7 @@ const Login = () => {
 
             <div className="mb-10 hidden lg:block animate-fade-up">
               <h2 className="text-3xl font-light text-white mb-2">
-                Create your account
+                Sign in to your account
               </h2>
               <p className="text-[#888594] text-[0.85rem] tracking-wide">
                 Join our exclusive fashion community today.
