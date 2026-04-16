@@ -46,9 +46,12 @@ userSchema.pre('save' , async function (){
 });
 
 
-userSchema.methods.comparePassword = async function (password){
-    if(!password) return console.log("passowrd is required");
-    return await bcrypt.compare(password , this.paswword);
+userSchema.methods.isComparePassword = async function (password) {
+    if(!password || !this.password){
+        return;
+    }
+
+    return await bcrypt.compare(password, this.password)
 }
 
 userSchema.methods.generateAccessToken = function (){

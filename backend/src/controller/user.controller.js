@@ -64,3 +64,45 @@ export const resgisterUser = asyncHandler ( async ( req , res) =>{
         "User registered successfully."
     ))
 })
+
+// login user controller
+
+export const loginUser = asyncHandler ( async ( req , res) =>{
+    const  {email ,password} = req.body;
+    
+    // check if user exist or not
+    const user =  await User.findOne({email});
+    if(!user){
+        return res.status(404).json( new ApiError(404,"User not found with this email."));
+    };
+   
+ 
+    // if user exist then check password
+    const isPasswordCorrect = await user.isComparePassword(password);
+
+    if(!isPasswordCorrect){
+        return res.status(401).json( new ApiError(401,"Invalid password."));
+    };
+    // generate token
+    const snitch_token = user.generateAccessToken();
+    
+    console.log("token" , snitch_token);
+    if(!snitch_token){
+        return res.status(401).json( new ApiError(401,"Failed to generate token."));
+    }
+
+    const options={
+        httpOnly : true,
+        sameSite : "strict",
+        maxAge : 24 * 60 * 60 * 1000,
+        secure : true
+    };
+
+    return res.status(200)
+    .cookie('snitch_token',snitch_token , options)
+    .json( new ApiResponse(
+        200,
+        user,
+        "User logged in successfully."
+    ))
+})
