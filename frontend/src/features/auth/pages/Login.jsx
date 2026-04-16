@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { loading, error } = useSelector((state) => state.auth);
@@ -31,25 +32,26 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // call login function from useAuth hook
-
     const resp = await handleLogin(formData);
-    console.log("resp", resp);
-    
     if(resp?.success){
       navigate('/') // navigate to home page on successful login
-      console.log(resp?.message);
-      
+      toast.success(resp?.message )      
     }else{
       // handle login failure 
-      // currently error is being set in auth slice but not dispatched from useAuth hook, so we can show generic error message here or update useAuth hook to dispatch error properly
-      console.log("Login failed", resp?.errors || "Unknown error");
-      console.log("Erron in login state" , error);
-  
+      toast.error(error?.email || error?.password 
+      || 
+      "Login failed. Please check your credentials and try again."
+      )
     }
+
+    // reset form data after submission
+    setFormData({
+      email:"",
+      password : ""
+    })
   };
 
 
-  console.log("form data" ,formData);
   
   return (
     <>

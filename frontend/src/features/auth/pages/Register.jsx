@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const { handleRegister } = useAuth();
@@ -43,9 +44,10 @@ const Register = () => {
 
     if (data.success) {
       navigate("/");
-      console.log(resp?.message);
+      toast.success(resp?.message || "Registration successful! Welcome to Snitch.");
     } else {
-      console.log("error from gegister page", data?.errors);
+      // console.log("error from gegister page",error?.fullName);
+      toast.error(data?.errors?.fullname || "Registration failed. Please check your details and try again.")
     }
 
     setFormData({
