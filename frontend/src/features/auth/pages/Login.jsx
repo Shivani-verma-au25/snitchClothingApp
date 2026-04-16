@@ -1,38 +1,56 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
-    const { loading, error } = useSelector((state) => state.auth);
-      const navigate = useNavigate();
-    
-      const [showPassword, setShowPassword] = useState(false);
-      const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-      });
+  const { loading, error } = useSelector((state) => state.auth);
+  const {handleLogin} = useAuth();
+  const navigate = useNavigate();
 
-     const [mounted, setMounted] = useState(false);
-    
-      useEffect(() => {
-        setMounted(true);
-      }, []);
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
+  const [mounted, setMounted] = useState(false);
 
-      const handleChange = (e) => {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]:value,
+      [name]: value,
     }));
   };
 
-
-      const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-        console.log("login user");
-        
+    // call login function from useAuth hook
+
+    const resp = await handleLogin(formData);
+    console.log("resp", resp);
+    
+    if(resp?.success){
+      navigate('/') // navigate to home page on successful login
+      console.log(resp?.message);
+      
+    }else{
+      // handle login failure 
+      // currently error is being set in auth slice but not dispatched from useAuth hook, so we can show generic error message here or update useAuth hook to dispatch error properly
+      console.log("Login failed", resp?.errors || "Unknown error");
+      console.log("Erron in login state" , error);
+  
+    }
   };
+
+
+  console.log("form data" ,formData);
+  
   return (
     <>
       <style>
@@ -120,7 +138,6 @@ const Login = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-            
               {/* Email */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
                 <label
@@ -142,10 +159,11 @@ const Login = () => {
                   />
                 </div>
                 {error?.email && (
-                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.email}</p>
-              )}
+                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">
+                    {error?.email}
+                  </p>
+                )}
               </div>
-              
 
               {/* Password */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-200">
@@ -207,11 +225,12 @@ const Login = () => {
                   </button>
                 </div>
                 {error?.password && (
-                  <p className="px-1 py-1 rounded-xl text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.password}</p>
-              )}
+                  <p className="px-1 py-1 rounded-xl text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">
+                    {error?.password}
+                  </p>
+                )}
               </div>
-              
-              
+
               {/* {error && (
                 <div className="px-4 py-3 rounded-xl bg-[#2a1315] border border-[#5c2428] text-[#ffb4ab] text-sm animate-fade-up mt-1 flex items-center gap-2">
                   <svg
@@ -295,6 +314,6 @@ const Login = () => {
       </div>
     </>
   );
-}
+};
 
-export default Login
+export default Login;

@@ -43,6 +43,7 @@ const Register = () => {
 
     if (data.success) {
       navigate("/");
+      console.log(resp?.message);
     } else {
       console.log("error from gegister page", data?.errors);
     }
@@ -163,11 +164,12 @@ const Register = () => {
                     autoComplete="off"
                   />
                 </div>
-              </div>
-
-              {error?.fullname && (
+                {error?.fullname && (
                   <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up  flex items-center gap-1">{error?.fullname}</p>
               )}
+              </div>
+
+              
 
               {/* Email */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
@@ -189,10 +191,11 @@ const Register = () => {
                     autoComplete="off"
                   />
                 </div>
-              </div>
-              {error?.email && (
+                {error?.email && (
                   <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.email}</p>
               )}
+              </div>
+              
 
               {/* Contact Number */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
@@ -214,10 +217,11 @@ const Register = () => {
                     autoComplete="off"
                   />
                 </div>
-              </div>
-              {error?.contact && (
+                {error?.contact && (
                   <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.contact}</p>
               )}
+              </div>
+              
 
               {/* Password */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-200">
@@ -278,10 +282,11 @@ const Register = () => {
                     )}
                   </button>
                 </div>
-              </div>
-              {error?.password && (
+                {error?.password && (
                   <p className="px-1 py-1 rounded-xl text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.password}</p>
               )}
+              </div>
+              
 
               {/* Is Seller Checkbox area */}
               <div className="mt-2 flex items-center justify-between p-4 rounded-xl border border-[#2a2930] bg-[#151519] animate-fade-up delay-200 hover:border-[#383642] transition-colors">
