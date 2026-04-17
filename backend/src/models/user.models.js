@@ -18,12 +18,14 @@ const userSchema = new  Schema({
     },
     password : {
         type : String ,
-        required : true,
+        required : function () {
+            return !this.googleId;
+        },
         trim : true
     },
     contact :{
         type : String,
-        required : true,
+        required : false,
         trim : true
     },
     role:{
@@ -35,6 +37,9 @@ const userSchema = new  Schema({
         type : Boolean,
         default : false
     },
+    googleId :{
+        type :String
+    }
 
 } , {timestamps : true})
 

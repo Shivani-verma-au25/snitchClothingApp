@@ -86,18 +86,15 @@ export const loginUser = asyncHandler ( async ( req , res) =>{
     // generate token
     const snitch_token = user.generateAccessToken();
     
-    console.log("token" , snitch_token);
     if(!snitch_token){
         return res.status(401).json( new ApiError(401,"Failed to generate token."));
     }
-
     const options={
         httpOnly : true,
         sameSite : "strict",
         maxAge : 24 * 60 * 60 * 1000,
         secure : true
     };
-
     return res.status(200)
     .cookie('snitch_token',snitch_token , options)
     .json( new ApiResponse(
@@ -105,4 +102,42 @@ export const loginUser = asyncHandler ( async ( req , res) =>{
         user,
         "User logged in successfully."
     ))
+})
+
+
+export const  googleCallback = asyncHandler( async (req, res) => {
+    const {id ,displayName, emails,photos} = req.user;
+    const email = emails[0].value;
+    const profilePic = photos[0]?.value;
+
+    // find user 
+    let user = await User.findOne({
+        email
+        });
+
+    // if user is not registered create one
+    if(!user){
+        user = await User.create({
+            email,
+            googleId : id,
+            fullname : displayName,
+        })
+    };
+
+    // generate token 
+    const snitch_token = await user.generateAccessToken();
+
+    const options ={
+        httpOnly : true,
+        secure : true,
+        sameSite : 'strict',
+        maxAge : 24 * 60 * 60 * 1000,
+    }
+
+    // set into cookies
+
+    return res.status(200)
+    .cookie('snitch_Token' , snitch_token , options)
+    .redirect('http://localhost:5173/')
+    
 })

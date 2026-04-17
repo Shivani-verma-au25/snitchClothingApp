@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
 
 const Register = () => {
   const { handleRegister } = useAuth();
@@ -44,10 +45,15 @@ const Register = () => {
 
     if (data.success) {
       navigate("/");
-      toast.success(resp?.message || "Registration successful! Welcome to Snitch.");
+      toast.success(
+        resp?.message || "Registration successful! Welcome to Snitch.",
+      );
     } else {
       // console.log("error from gegister page",error?.fullName);
-      toast.error(data?.errors?.fullname || "Registration failed. Please check your details and try again.")
+      toast.error(
+        data?.errors?.fullname ||
+          "Registration failed. Please check your details and try again.",
+      );
     }
 
     setFormData({
@@ -167,11 +173,11 @@ const Register = () => {
                   />
                 </div>
                 {error?.fullname && (
-                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up  flex items-center gap-1">{error?.fullname}</p>
-              )}
+                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up  flex items-center gap-1">
+                    {error?.fullname}
+                  </p>
+                )}
               </div>
-
-              
 
               {/* Email */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
@@ -194,10 +200,11 @@ const Register = () => {
                   />
                 </div>
                 {error?.email && (
-                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.email}</p>
-              )}
+                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">
+                    {error?.email}
+                  </p>
+                )}
               </div>
-              
 
               {/* Contact Number */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
@@ -220,10 +227,11 @@ const Register = () => {
                   />
                 </div>
                 {error?.contact && (
-                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.contact}</p>
-              )}
+                  <p className="px-1 py-1 rounded-xl  text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">
+                    {error?.contact}
+                  </p>
+                )}
               </div>
-              
 
               {/* Password */}
               <div className="flex flex-col gap-1.5 animate-fade-up delay-200">
@@ -285,10 +293,11 @@ const Register = () => {
                   </button>
                 </div>
                 {error?.password && (
-                  <p className="px-1 py-1 rounded-xl text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">{error?.password}</p>
-              )}
+                  <p className="px-1 py-1 rounded-xl text-[#ffb4ab] text-xs animate-fade-up flex items-center gap-1">
+                    {error?.password}
+                  </p>
+                )}
               </div>
-              
 
               {/* Is Seller Checkbox area */}
               <div className="mt-2 flex items-center justify-between p-4 rounded-xl border border-[#2a2930] bg-[#151519] animate-fade-up delay-200 hover:border-[#383642] transition-colors">
@@ -322,6 +331,20 @@ const Register = () => {
                     }`}
                   />
                 </button>
+              </div>
+
+              {/* google button */}
+              <div className="flex flex-col gap-1 animate-fade-up delay-100">
+                <a
+                  className="mt-1 w-full py-4 px-4 rounded-xl text-[0.85rem] flex justify-center items-center gap-1 font-medium tracking-wide transition-all duration-300 active:scale-[0.98] hover:brightness-110 animate-fade-up delay-300 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#E3D8FF] focus:ring-offset-2 focus:ring-offset-[#0d0d0f]"
+                  style={{
+                    background: "linear-gradient(135deg, #E3D8FF, #C9B8FF)",
+                    color: "#2a2054",
+                  }}
+                  href={"/api/auth/google"}
+                >
+                  Continue with Google <FcGoogle size={20} />
+                </a>
               </div>
 
               {/* {error && typeof error === "object" && (
@@ -371,7 +394,7 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-4 w-full py-4 px-4 rounded-xl text-[0.85rem]  font-medium tracking-wide transition-all duration-300 active:scale-[0.98] hover:brightness-110 animate-fade-up delay-300 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#E3D8FF] focus:ring-offset-2 focus:ring-offset-[#0d0d0f]"
+                className="mt-0 w-full py-4 px-4 rounded-xl text-[0.85rem]  font-medium tracking-wide transition-all duration-300 active:scale-[0.98] hover:brightness-110 animate-fade-up delay-300 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#E3D8FF] focus:ring-offset-2 focus:ring-offset-[#0d0d0f]"
                 style={{
                   background: "linear-gradient(135deg, #E3D8FF, #C9B8FF)",
                   color: "#2a2054",
@@ -414,7 +437,7 @@ const Register = () => {
               </button>
             </form>
 
-            <div className="mt-10 text-center animate-fade-up delay-300">
+            <div className="mt-4 text-center animate-fade-up delay-300">
               <p className="text-[0.8rem] text-[#888594]">
                 Already have an account?{" "}
                 <a

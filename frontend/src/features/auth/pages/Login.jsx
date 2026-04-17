@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
+
 
 const Login = () => {
   const { loading, error } = useSelector((state) => state.auth);
@@ -232,6 +234,15 @@ const Login = () => {
                   </p>
                 )}
               </div>
+              {/* // google button */}
+              <div className="flex flex-col gap-1.5 animate-fade-up delay-100">
+                <a className="mt-4 w-full py-4 px-4 rounded-xl text-[0.85rem] flex justify-center items-center gap-1 font-medium tracking-wide transition-all duration-300 active:scale-[0.98] hover:brightness-110 animate-fade-up delay-300 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#E3D8FF] focus:ring-offset-2 focus:ring-offset-[#0d0d0f]"
+                style={{
+                  background: "linear-gradient(135deg, #E3D8FF, #C9B8FF)",
+                  color: "#2a2054",
+                }}
+                href={'/api/auth/google'} >Continue with Google <FcGoogle size={20} /></a>
+              </div> 
 
               {/* {error && (
                 <div className="px-4 py-3 rounded-xl bg-[#2a1315] border border-[#5c2428] text-[#ffb4ab] text-sm animate-fade-up mt-1 flex items-center gap-2">
