@@ -10,10 +10,10 @@ import {Strategy as GoogleStrategy} from "passport-google-oauth20";
 const app = express();
 
 // middlewares
-// app.use(cors({
-//     origin : config.FRONTEND_URI,
-//     credentials : true
-// }))
+app.use(cors({
+    origin : config.FRONTEND_URI,
+    credentials : true
+}))
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
@@ -32,11 +32,15 @@ passport.use(new GoogleStrategy({
     return done(null ,profile);
 }))
 
+
+
 // import routes 
 
 import authRouter from './routers/auth.routers.js';
+import productRouter from './routers/product.routes.js'
 // use routes
 app.use('/api/auth',authRouter);
+app.use('/api/products', productRouter)
 
 
 // health check route

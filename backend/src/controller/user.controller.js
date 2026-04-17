@@ -89,11 +89,12 @@ export const loginUser = asyncHandler ( async ( req , res) =>{
     if(!snitch_token){
         return res.status(401).json( new ApiError(401,"Failed to generate token."));
     }
+    console.log("token" ,snitch_token);
+
     const options={
         httpOnly : true,
         sameSite : "strict",
-        maxAge : 24 * 60 * 60 * 1000,
-        secure : true
+        secure : false
     };
     return res.status(200)
     .cookie('snitch_token',snitch_token , options)
@@ -126,6 +127,7 @@ export const  googleCallback = asyncHandler( async (req, res) => {
 
     // generate token 
     const snitch_token = await user.generateAccessToken();
+    
 
     const options ={
         httpOnly : true,

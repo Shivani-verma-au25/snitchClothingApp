@@ -23,6 +23,10 @@ if (!process.env.GOOGLE_CLIENT_SECRET) {
     throw new Error("Google client secret is not defined in environment variables");
 }
 
+if (!process.env.IMAGE_KIT_PRIVATE_KEY) {
+    throw new Error("iMAGE KIY PRIVATE KEY is not defined in environment variables");
+}
+
 export const config = {
     PORT: process.env.PORT || 8000,
     MONGO_DB_URI: process.env.MONDO_DB_URI,
@@ -31,5 +35,6 @@ export const config = {
     ACCESS_TOKEN_EXPIRE: process.env.ACCESS_TOKEN_EXPIRE || '1d',
     GOOGLE_CLIENT_ID : process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET : process.env.GOOGLE_CLIENT_SECRET,
-    NODE_ENV : process.env.NODE_ENV || 'development'
+    NODE_ENV : process.env.NODE_ENV || 'development',
+    IMAGE_KIT_PRIVATE_KEY : process.env.IMAGE_KIT_PRIVATE_KEY
 }
