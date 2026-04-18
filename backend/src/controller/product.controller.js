@@ -6,50 +6,56 @@ import { uploadFile } from '../services/storage.service.js'
 
 
 // created product by seller
-export const createProducts = asyncHandler(async ( req , res) =>{
-    const {title ,description ,priceAmount ,priceCurreny } = req.body;
-    const seller = req?.user;
+export const createProducts = asyncHandler(async (req, res) => {
 
-    // have to se imagekit
-    //todo :- add check - file is there or not only excute uploadfile only when filer is exist 
-    let images = null;
+    const { title, description, priceAmount, priceCurreny } = req.body;
+    const seller = req.user;
+
+    let images = [];
 
     try {
-        images = await Promise.all(req.files.map(async (file) =>{
-            return await uploadFile({
-                buffer:file.buffer,
-                fileName:file.originalname
-            })
-    }))
+        // ✅ check if files exist
+        if (req.files && req.files.length > 0) {
+            images = await Promise.all(
+                req.files.map(async (file) => {
+                    return await uploadFile({
+                        buffer: file.buffer,
+                        fileName: file.originalname
+                    });
+                })
+            );
+        }
+
     } catch (error) {
-     console.log("Error while uploading file" ,error);
-        return res.status(404).json( new ApiError(404 , "Error while uploading file", error.message))
-    };
-    // create product 
+        console.log("Error while uploading file", error);
+
+        return res.status(500).json(
+            new ApiError(500, "Error while uploading file")
+        );
+    }
+
     const product = await productModel.create({
         title,
         description,
-        price:{
-            amount : priceAmount,
-            currency : priceCurreny || 'INR'
+        price: {
+            amount: priceAmount,
+            currency: priceCurreny || "INR"
         },
         images,
-        seller :seller._id
+        seller: seller._id
     });
-    //  find prodct is created product
-    const createdProduct = await productModel.findById(product?._id);
-    // check is prodcut created
-    if (!product) {
-        return res.status(404).json( new ApiError( 404 , "PRoduct is not ccreated Yet." ))
-    };
 
-    //  return response if product cccretaed
-    return res.status(200).json( new ApiResponse (
-        200,
-        product,
-        "Product created successfully."
-    ))
-})
+    if (!product) {
+        return res.status(400).json(
+            new ApiError(400, "Product not created")
+        );
+    }
+
+    return res.status(201).json(
+        new ApiResponse(201, product, "Product created successfully")
+    );
+});
+
 
 
 // get all created products by seller
@@ -75,9 +81,14 @@ export const getProductCreatedBySeller = asyncHandler ( async ( req,res) => {
 export const getAllproducts = asyncHandler ( async ( req , res) => {
     
     const allProducts = await productModel.find();
+    
     if (!allProducts) {
         return res.status(404).json( new ApiError( 404 ,"Product not found."))
     }
 
-    return res.status(200).json( new ApiResponse( 200 , allProducts ,"All Products fetched successfully."))
+    return res.status(200).json( new ApiResponse(
+         200 , 
+        allProducts ,
+         "All Products fetched successfully."
+         ))
 })

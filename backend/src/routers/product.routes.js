@@ -9,7 +9,7 @@ router.route('/create' ,).post( isSellerAuthenticated , upload.array('images' ,8
 router.route('/seller').get(isSellerAuthenticated , getProductCreatedBySeller);
 
 //public url
-router.route('/').get( getAllproducts);
+router.route('/all-products').get( getAllproducts);
 
 
 export default router;
