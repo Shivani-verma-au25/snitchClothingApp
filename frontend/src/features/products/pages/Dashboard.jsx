@@ -7,116 +7,111 @@ import { Plus, Tag, Clock } from 'lucide-react'
 const Dashboard = () => {
     const { handleGetSellerProduct } = useProducts()
     
-    // The Redux store might save the entire API response object (e.g. { data: [...] }). 
-    // This normalizes it so `sellerProducts` is always a solid array.
-    const rawProducts = useSelector(state => state.product?.sellerProducts);
-    const sellerProducts = Array.isArray(rawProducts) ? rawProducts : (rawProducts?.data || []);
+    // Normalizing the products to ensure it's always an array
+    const sellerProducts = useSelector(state => state.product?.sellerProducts || []);
     
     const productLoading = useSelector(state => state.product?.productLoading);
+    console.log("seller",sellerProducts);
 
     useEffect(() => {
         handleGetSellerProduct()
     }, [])
 
-    console.log("seller products array:", sellerProducts);
-    
 
+    
     return (
-        <div className="min-h-screen bg-[#131317] text-[#e4e1e7] font-['Inter'] px-6 py-16 md:px-16 lg:px-32 selection:bg-[#c9b8ff]/30 selection:text-[#e3d8ff]">
+        <div className="min-h-screen bg-[#faf9f6] text-[#1a1c1a] font-['Inter'] px-6 py-20 md:px-16 lg:px-32">
             
             {/* Header Section */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-8">
-                <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out">
-                    <p className="text-[#cac4d1] text-xs md:text-sm uppercase tracking-[0.2em] mb-4">Seller Portal</p>
-                    <h1 className="text-4xl md:text-6xl font-light tracking-tight text-[#e4e1e7]">
+                <div>
+                    <p className="text-[#6b6b6b] text-[11px] uppercase tracking-[0.2em] mb-4">Seller Portal</p>
+                    <h1 className="text-4xl md:text-5xl font-light tracking-[0.15em] uppercase text-[#1a1c1a]">
                         The Archive.
                     </h1>
                 </div>
-                <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-150 ease-out">
+                <div>
                     <Link 
                         to="/seller/add-product" 
-                        className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-br from-[#e3d8ff] to-[#c9b8ff] text-[#342662] rounded-full overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_15px_35px_rgba(201,184,255,0.15)] filter hover:brightness-105"
+                        className="group inline-flex items-center gap-4 px-8 py-4 bg-[#5f5e5e] text-[#ffffff] transition-all duration-300 hover:bg-[#1a1c1a] shadow-[0_10px_20px_rgba(26,28,26,0.05)] rounded-none"
                     >
-                        <span className="relative z-10 text-xs md:text-sm font-semibold uppercase tracking-widest">New Product</span>
-                        <Plus className="relative z-10 w-4 h-4 transition-transform duration-500 group-hover:rotate-90" />
+                        <span className="text-[11px] font-medium uppercase tracking-[0.2em]">New Product</span>
+                        <Plus className="w-4 h-4 transition-transform duration-300 group-hover:rotate-90" />
                     </Link>
                 </div>
             </div>
 
             {/* Products List */}
             {productLoading ? (
-                <div className="flex justify-center items-center py-32 animate-in fade-in duration-500">
-                    <div className="w-12 h-12 border-t-2 border-[#c9b8ff] rounded-full animate-spin"></div>
+                <div className="flex justify-center items-center py-32 transition-opacity duration-300">
+                    <div className="w-8 h-8 border-t-2 border-[#5f5e5e] rounded-full animate-spin"></div>
                 </div>
-            ) : sellerProducts.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-32 bg-[#1b1b1f]/50 backdrop-blur-sm rounded-[2rem] border border-[#353439]/30 animate-in fade-in zoom-in-95 duration-700">
-                    <p className="text-[#cac4d1] font-light text-lg mb-6">No pieces curated yet.</p>
-                    <Link to="/seller/add-product" className="text-[#c9b8ff] text-sm uppercase tracking-widest hover:text-[#e3d8ff] transition-colors pb-1 border-b border-[#c9b8ff]/30 hover:border-[#e3d8ff]">
+            ) : sellerProducts?.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-32 bg-[#ffffff] shadow-sm transition-all duration-500">
+                    <p className="text-[#6b6b6b] font-light text-base mb-6">No pieces curated yet.</p>
+                    <Link to="/seller/add-product" className="text-[#1a1c1a] text-[11px] uppercase tracking-[0.1em] hover:text-[#5f5e5e] transition-colors border-b border-[#1a1c1a]/30 pb-1">
                         Start your collection
                     </Link>
                 </div>
             ) : (
-                <div className="flex flex-col gap-16 md:gap-32">
-                    {sellerProducts.map((product, idx) => (
+                <div className="flex flex-col gap-24">
+                    {sellerProducts && sellerProducts?.map((product, idx) => (
                         <div 
                             key={product._id} 
-                            className={`group flex flex-col ${idx % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 md:gap-20 items-center p-4 md:p-8 rounded-[2.5rem] hover:bg-[#1b1b1f] transition-colors duration-700 ease-out animate-in fade-in slide-in-from-bottom-12`}
-                            style={{ animationFillMode: 'both', animationDelay: `${idx * 150 + 300}ms` }}
+                            className={`group flex flex-col ${idx % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-12 md:gap-24 items-center bg-[#ffffff] p-6 md:p-12 transition-all duration-500 hover:shadow-[0_10px_40px_rgba(26,28,26,0.06)] ring-1 ring-[#f4f3f0]`}
                         >
                             {/* Product Image */}
-                            <div className="w-full md:w-1/3 aspect-[4/5] overflow-hidden rounded-[2rem] bg-[#0e0e12] relative shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
+                            <div className="w-full md:w-5/12 aspect-[4/5] bg-[#f4f3f0] relative overflow-hidden">
                                 {product.images && product.images.length > 0 ? (
                                     <img 
                                         src={product.images[0].url} 
                                         alt={product.title} 
-                                        className="w-full h-full object-cover grayscale-[0.2] transition-all duration-1000 group-hover:scale-[1.03] group-hover:grayscale-0"
+                                        className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
                                     />
                                 ) : (
-                                    <div className="w-full h-full flex flex-col items-center justify-center text-[#48454f]">
-                                        <Tag className="w-8 h-8 mb-4 opacity-40" />
-                                        <span className="text-[10px] uppercase tracking-widest">No Visual</span>
+                                    <div className="w-full h-full flex flex-col items-center justify-center text-[#bcbaba]">
+                                        <Tag className="w-8 h-8 mb-4 opacity-50" />
+                                        <span className="text-[11px] uppercase tracking-[0.2em] text-[#6b6b6b]">No Visual</span>
                                     </div>
                                 )}
-                                {/* Overlay gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#131317]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                             </div>
 
                             {/* Product Details */}
-                            <div className="w-full md:w-1/2 flex flex-col justify-center">
+                            <div className="w-full md:w-7/12 flex flex-col justify-center">
                                 <div className="flex items-center gap-4 mb-6">
-                                    <span className="text-[10px] text-[#938f9a] uppercase tracking-[0.2em] font-mono">
+                                    <span className="text-[11px] text-[#6b6b6b] uppercase tracking-[0.2em]">
                                         ID: {product._id.slice(-6)}
                                     </span>
-                                    <div className="h-[1px] w-12 bg-[#353439]"></div>
-                                    <span className="flex items-center gap-1.5 text-[10px] text-[#cac4d1] uppercase tracking-[0.2em]">
+                                    <div className="h-[1px] w-8 bg-[#cec5b9]"></div>
+                                    <span className="flex items-center gap-1.5 text-[11px] text-[#6b6b6b] uppercase tracking-[0.2em]">
                                         <Clock className="w-3 h-3" />
                                         {new Date(product.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                     </span>
                                 </div>
                                 
-                                <h3 className="text-3xl md:text-5xl font-light tracking-wide text-[#e4e1e7] mb-6 capitalize leading-tight group-hover:text-[#e3d8ff] transition-colors duration-500">
+                                <h3 className="text-3xl md:text-4xl font-light tracking-[0.1em] text-[#1a1c1a] mb-6 uppercase">
                                     {product.title}
                                 </h3>
                                 
-                                <p className="text-[#cac4d1] text-sm md:text-base leading-relaxed font-light mb-10 line-clamp-3">
+                                <p className="text-[#4b463d] text-sm leading-8 font-light mb-12 max-w-lg">
                                     {product.description}
                                 </p>
                                 
-                                <div className="mt-auto flex items-end justify-between pt-6 border-t border-[#353439]/50">
+                                <div className="mt-auto flex items-end justify-between">
                                     <div>
-                                        <p className="text-[9px] text-[#938f9a] uppercase tracking-widest mb-1.5 opacity-80">Valuation</p>
-                                        <div className="flex items-baseline gap-1">
-                                            <span className="text-lg font-medium text-[#c9b8ff] opacity-80">
+                                        <p className="text-[11px] text-[#6b6b6b] uppercase tracking-[0.2em] mb-2">Price</p>
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className="text-xl font-medium text-[#695d43]">
                                                 {product.price?.currency === 'INR' ? '₹' : product.price?.currency}
                                             </span>
-                                            <span className="text-4xl tracking-tighter text-[#e3d8ff]">
+                                            <span className="text-3xl tracking-tight text-[#1a1c1a]">
                                                 {product.price?.amount}
                                             </span>
                                         </div>
                                     </div>
                                     
-                                    <button className="px-6 py-2.5 rounded-full border border-[#48454f] text-[#cac4d1] text-[10px] uppercase tracking-widest transition-all duration-300 hover:border-[#c9b8ff]/60 hover:text-[#c9b8ff] hover:bg-[#c9b8ff]/5 hover:shadow-[0_0_20px_rgba(201,184,255,0.05)]">
-                                        Modify
+                                    <button className="px-8 py-3 bg-transparent border border-[#cec5b9] text-[#1a1c1a] text-[11px] uppercase tracking-[0.1em] transition-all duration-300 hover:border-[#1a1c1a] hover:bg-[#faf9f6]">
+                                        Edit Details
                                     </button>
                                 </div>
                             </div>

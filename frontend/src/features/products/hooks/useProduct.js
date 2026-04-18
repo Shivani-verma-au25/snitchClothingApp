@@ -26,11 +26,21 @@ export const useProducts = () =>{
     };
 
     const handleGetSellerProduct = async () =>{
-        const res = await getSellerProducts();
-        if (res?.success) {
-            dispatch(setSellerProduct(res));
+        dispatch(setProductLoading(true));
+        try {
+            const res = await getSellerProducts();
+            console.log(res.data);
+        
+            if (res?.success) {
+                dispatch(setSellerProduct(res?.data));
+            }
+            return res;
+        } catch (error) {
+           console.log("getting error in useproduct",error);
+            return error
+        }finally{
+            dispatch(setProductLoading(false))
         }
-        return res;
     }
 
     return {
