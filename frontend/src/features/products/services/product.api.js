@@ -19,3 +19,10 @@ export const getSellerProducts = async ()=>{
     const response = await productInstance.get('/seller');
     return response.data;
 }
+
+// get all products
+export const getAllProducts = async () =>{
+    const response = await productInstance.get('/all-products');
+    return response.data;
+}
+

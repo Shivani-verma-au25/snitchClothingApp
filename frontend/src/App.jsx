@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './features/auth/hooks/useAuth';
 import { useEffect } from 'react';
+import Home from './features/products/pages/Home';
 
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={ <h1>Hello world</h1> }/>
+        <Route path='/' element={ <Home/> }/>
         <Route path ='/register' element={<Register />} />
         <Route path ='/login' element={<Login />} />
 

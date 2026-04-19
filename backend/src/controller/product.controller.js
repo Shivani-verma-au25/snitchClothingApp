@@ -80,7 +80,9 @@ export const getProductCreatedBySeller = asyncHandler ( async ( req,res) => {
 
 export const getAllproducts = asyncHandler ( async ( req , res) => {
     
-    const allProducts = await productModel.find();
+    // const allProducts = await productModel.find().populate('seller',"fullname contact email");
+    const allProducts = await productModel.find()
+
     
     if (!allProducts) {
         return res.status(404).json( new ApiError( 404 ,"Product not found."))
