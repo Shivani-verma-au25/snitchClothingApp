@@ -4,9 +4,20 @@ import Login from './features/auth/pages/Login'
 import toast, { Toaster } from 'react-hot-toast';
 import AddProduct from './features/products/pages/AddProduct';
 import Dashboard from './features/products/pages/Dashboard';
+import { useSelector } from 'react-redux';
+import ProtectedRoute from './components/ProtectedRoute';
+import { useAuth } from './features/auth/hooks/useAuth';
+import { useEffect } from 'react';
 
 
 function App() {
+  const {handleGetMe} = useAuth();
+  
+
+  useEffect(() => {
+        handleGetMe();
+    } ,[])
+  
 
   return (
     <>
@@ -17,8 +28,11 @@ function App() {
 
 
         // seller
-        <Route path="/seller/add-product" element={<AddProduct/>} />
-        <Route path="/seller/dashboard" element={<Dashboard/>} />
+        <Route path="/seller/add-product" element={
+          <ProtectedRoute role='seller' > <AddProduct/> </ProtectedRoute>
+        } />
+        <Route path="/seller/dashboard" element={
+          <ProtectedRoute role='seller' ><Dashboard/></ProtectedRoute>} />
       </Routes>
       <Toaster/>
     </>

@@ -89,7 +89,6 @@ export const loginUser = asyncHandler ( async ( req , res) =>{
     if(!snitch_token){
         return res.status(401).json( new ApiError(401,"Failed to generate token."));
     }
-    console.log("token" ,snitch_token);
 
     const options={
         httpOnly : true,
@@ -105,7 +104,7 @@ export const loginUser = asyncHandler ( async ( req , res) =>{
     ))
 })
 
-
+// login or register with google
 export const  googleCallback = asyncHandler( async (req, res) => {
     const {id ,displayName, emails,photos} = req.user;
     const email = emails[0].value;
@@ -141,5 +140,22 @@ export const  googleCallback = asyncHandler( async (req, res) => {
     return res.status(200)
     .cookie('snitch_Token' , snitch_token , options)
     .redirect('http://localhost:5173/')
+    
+})
+
+
+
+// get me logged in user details or user
+
+export const  getMe = asyncHandler( async( req ,res)=>{
+    const user = req?.user;
+
+    const loggedInUser = await User.findById(user?._id).select('-password');
+
+    if (!loggedInUser) {
+        return res.status(300).json( new ApiError( 300 , "User Not logged in! Please login first."))
+    };
+
+    return res.status(200).json( new ApiResponse(200 , loggedInUser , `welcome back ${loggedInUser?.fullname} ` ))
     
 })

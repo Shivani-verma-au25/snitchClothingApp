@@ -11,7 +11,6 @@ const Dashboard = () => {
     const sellerProducts = useSelector(state => state.product?.sellerProducts || []);
     
     const productLoading = useSelector(state => state.product?.productLoading);
-    console.log("seller",sellerProducts);
 
     useEffect(() => {
         handleGetSellerProduct()

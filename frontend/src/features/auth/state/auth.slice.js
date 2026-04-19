@@ -1,11 +1,12 @@
 import { createSlice} from '@reduxjs/toolkit'
+import { TruckElectric } from 'lucide-react'
 
 
 const authSlice = createSlice({
     name : 'auth',
     initialState :{
         user:null,
-        loading : false,
+        loading : true,
         error : null
     },
     reducers :{
