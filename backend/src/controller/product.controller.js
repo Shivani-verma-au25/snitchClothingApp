@@ -94,3 +94,16 @@ export const getAllproducts = asyncHandler ( async ( req , res) => {
          "All Products fetched successfully."
          ))
 })
+
+
+export const getProductDetails = asyncHandler ( async ( req, res) => {
+    const {id} = req.params;
+
+    const product = await productModel.findById(id);
+    if(!product){
+        return res.status(404).json( new ApiError( 404 , "Product not found."))
+    };
+
+    return res.status(200).json( new ApiResponse(200 , product ,"Product details fetched."))
+
+})

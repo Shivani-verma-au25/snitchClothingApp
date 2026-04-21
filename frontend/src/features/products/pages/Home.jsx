@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useProducts } from '../hooks/useProduct';
+import { useNavigate } from 'react-router';
 
 const Header = ({ user }) => {
+
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 border-b border-gray-100 transition-all duration-300">
       <div className="max-w-[1400px] mx-auto px-6 sm:px-12 md:px-20 h-20 flex items-center justify-between">
@@ -119,6 +121,7 @@ const Home = () => {
     const productsState = useSelector(state => state.product?.products);
     const user = useSelector(state => state.auth?.user);
     const { handleGetAllProducts } = useProducts();
+    const navigate = useNavigate()
 
     useEffect(() => {
         handleGetAllProducts();
@@ -180,6 +183,7 @@ const Home = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-12 gap-y-20">
                             {productsList.map((product, index) => (
                                 <div 
+                                onClick={() => navigate(`/product/${product?._id}`)}
                                     key={product._id || index}
                                     className="opacity-0 animate-[fadeInUp_1s_ease-out_forwards]"
                                     style={{ animationDelay: `${0.1 * (index % 10) + 0.3}s` }}

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { createProduct ,getAllProducts,getSellerProducts} from "../services/product.api";
+import { createProduct ,getAllProducts,getroductDetails,getSellerProducts} from "../services/product.api";
 import { setProductLoading, setProducts, setSellerProduct } from "../state/product.state.slice";
 
 export const useProducts = () =>{
@@ -58,11 +58,30 @@ export const useProducts = () =>{
         }finally{
             dispatch(setProductLoading(false));
         };
+    };
+
+    const handleGetproductDetail = async ( productId) =>{
+        dispatch(setProductLoading( true));
+        try {
+            const resp = await getroductDetails(productId);
+            if (resp?.success) {
+                dispatch(setProducts(resp?.data));
+            }
+            return resp;
+            
+        } catch (error) {
+            console.log("getting error in get details" , error);
+            dispatch(setProductLoading(false));
+            dispatch(setProducts(null));
+        }finally{
+            dispatch(setProductLoading(false));
+        }
     }
 
     return {
         handleCreateProduct,
         handleGetSellerProduct,
         handleGetAllProducts,
+        handleGetproductDetail
     }
 }

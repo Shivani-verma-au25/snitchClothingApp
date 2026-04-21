@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './features/auth/hooks/useAuth';
 import { useEffect } from 'react';
 import Home from './features/products/pages/Home';
+import ProductDetail from './features/products/pages/ProductDetail';
 
 
 function App() {
@@ -26,6 +27,10 @@ function App() {
         <Route path='/' element={ <Home/> }/>
         <Route path ='/register' element={<Register />} />
         <Route path ='/login' element={<Login />} />
+
+
+        {/* user */}
+        <Route path='/product/:productId' element={<ProductDetail />}/>
 
 
         // seller

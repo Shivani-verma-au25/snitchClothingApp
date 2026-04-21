@@ -26,3 +26,8 @@ export const getAllProducts = async () =>{
     return response.data;
 }
 
+export const getroductDetails = async (productId) =>{
+    const response = await productInstance.get(`/product-detail/${productId}`);
+    return response.data;
+}
+
