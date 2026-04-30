@@ -48,7 +48,7 @@ const ImageUploadGrid = ({ images, onChange }) => {
       <div className="grid grid-cols-2 gap-4">
         {images.map(img => (
           <div key={img._id} className="relative aspect-[4/5] bg-[#f4f3f0] group overflow-hidden">
-            <img src={img.url} alt="upload" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src={img.url} alt="upload" type='file' multiple className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <button type="button" onClick={() => removeImage(img._id)} className="absolute top-4 right-4 bg-[#1a1c1a]/40 backdrop-blur-md text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
@@ -87,6 +87,13 @@ export default function AddProduct() {
   }
 
   const handlePublish = async () => {
+    
+     // VALIDATION
+    if (form.images.length === 0) {
+      toast.error("Please upload at least one image before publishing");
+      return;
+    }
+
     try {
       setSubmitting(true)
       const res = await handleCreateProduct(form)

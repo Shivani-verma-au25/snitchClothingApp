@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useProducts } from '../hooks/useProduct'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { Plus, Tag, Clock } from 'lucide-react'
 
 const Dashboard = () => {
-    const { handleGetSellerProduct } = useProducts()
+    const { handleGetSellerProduct } = useProducts();
+    const navigate = useNavigate()
     
     // Normalizing the products to ensure it's always an array
     const sellerProducts = useSelector(state => state.product?.sellerProducts || []);
@@ -54,9 +55,10 @@ const Dashboard = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {sellerProducts && sellerProducts?.map((product) => (
+                    {Array.isArray(sellerProducts) && sellerProducts?.map((product) => (
                         <div 
-                            key={product._id} 
+                            onClick={() => navigate(`/seller/product/${product?._id}`)}
+                            key={product?._id} 
                             className="group flex flex-col bg-[#ffffff] transition-colors duration-300 hover:bg-[#f4f3f0] ring-1 ring-[#e3e2df] rounded-none overflow-hidden"
                         >
                             {/* Product Image */}

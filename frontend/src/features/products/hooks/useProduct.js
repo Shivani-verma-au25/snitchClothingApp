@@ -1,29 +1,65 @@
 import { useDispatch } from "react-redux";
-import { createProduct ,getAllProducts,getroductDetails,getSellerProducts} from "../services/product.api";
+import { createProduct ,getAllProducts,getroductDetails,getSellerProducts, addProductVariant} from "../services/product.api";
 import { setProductLoading, setProducts, setSellerProduct } from "../state/product.state.slice";
 
 export const useProducts = () =>{
 
     const dispatch = useDispatch()
-    const handleCreateProduct = async (formData) =>{
-        dispatch(setProductLoading(true));
-        try {
-            const res = await createProduct(formData);
-            console.log("res" ,res);
-            
-            if (res?.success) {
-                dispatch(setSellerProduct(res))
-            }
-            return res;
-        } catch (error) {
-            console.log("Error while creating products in  hook" , error);
-            dispatch(setProductLoading(false))
-            
-        }finally{
-            dispatch(setProductLoading(false))
-        }
 
+    // const handleCreateProduct = async (formData) =>{
+    //     dispatch(setProductLoading(true));
+    //     console.log("formdata" ,formData);
+        
+    //     try {
+    //         const res = await createProduct(formData);
+    //         console.log("res" ,res);
+            
+    //         if (res?.success) {
+    //             dispatch(setSellerProduct(res?.data))
+    //         }
+    //         return res;
+    //     } catch (error) {
+    //         console.log("Error while creating products in  hook" , error);
+    //         dispatch(setProductLoading(false))
+            
+    //     }finally{
+    //         dispatch(setProductLoading(false))
+    //     }
+
+    // };
+
+
+    const handleCreateProduct = async (form) => {
+            dispatch(setProductLoading(true));
+
+            try {
+                const data = new FormData();
+
+                data.append("title", form.title);
+                data.append("description", form.description);
+                data.append("priceAmount", form.priceAmount);
+                data.append("priceCurrency", form.priceCurrency);
+
+                // 🔥 FIX
+                form.images.forEach((img) => {
+                    data.append("images", img.file);
+                });
+
+                const res = await createProduct(data);
+
+                if (res?.success) {
+                    dispatch(setSellerProduct(res.data)); 
+                }
+
+                return res;
+
+            } catch (error) {
+                console.log("Error while creating products in hook", error);
+            } finally {
+                dispatch(setProductLoading(false));
+            }
     };
+
 
     const handleGetSellerProduct = async () =>{
         dispatch(setProductLoading(true));
@@ -78,10 +114,38 @@ export const useProducts = () =>{
         }
     }
 
+
+    const handleCreateVariant = async (productId, variantData) => {
+        dispatch(setProductLoading(true));
+        try {
+            const res = await addProductVariant(productId, variantData);
+            return res;
+        } catch (error) {
+            console.log("Error in handleCreateVariant", error);
+        } finally {
+            dispatch(setProductLoading(false));
+        }
+    };
+
+    // const handleUpdateVariantStock = async (productId, variantId, stocks) => {
+    //     dispatch(setProductLoading(true));
+    //     try {
+    //         const res = await updateVariantStock(productId, variantId, stocks);
+    //         return res;
+    //     } catch (error) {
+    //         console.log("Error in handleUpdateVariantStock", error);
+    //     } finally {
+    //         dispatch(setProductLoading(false));
+    //     }
+    // };
+
     return {
         handleCreateProduct,
         handleGetSellerProduct,
         handleGetAllProducts,
-        handleGetproductDetail
+        handleGetproductDetail,
+        handleCreateVariant,
+        // handleUpdateVariantStock
     }
+
 }

@@ -20,7 +20,6 @@ const ProductDetail = () => {
         fetchProductDetails();
     }, [productId]);
 
-    console.log("product" , product);
     
 
     if (!product) {

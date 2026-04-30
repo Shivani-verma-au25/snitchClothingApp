@@ -10,6 +10,8 @@ import { useAuth } from './features/auth/hooks/useAuth';
 import { useEffect } from 'react';
 import Home from './features/products/pages/Home';
 import ProductDetail from './features/products/pages/ProductDetail';
+import SellerProdctDeails from './features/products/pages/SellerProdctDeails'
+import AddVariant from './features/products/pages/AddVariant'
 
 
 function App() {
@@ -39,6 +41,15 @@ function App() {
         } />
         <Route path="/seller/dashboard" element={
           <ProtectedRoute role='seller' ><Dashboard/></ProtectedRoute>} />
+
+        <Route path="/seller/product/:productId" element={
+          <ProtectedRoute role='seller' ><SellerProdctDeails/></ProtectedRoute>} />
+
+        {/* <Route path="/seller/product/:productId/add-variant" element={
+          <ProtectedRoute role='seller' ><AddVariant/></ProtectedRoute>} /> */}
+
+        <Route path="/:productId/add-variant" element={
+          <ProtectedRoute role='seller' ><AddVariant/></ProtectedRoute>} />
       </Routes>
       <Toaster/>
     </>

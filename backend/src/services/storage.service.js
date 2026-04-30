@@ -14,8 +14,9 @@ export async function uploadFile({buffer , fileName , folder = 'snitch'}){
             folder
         });
         console.log("Image file" ,result);
-        
-        return result;
+        return {
+            url: result.url
+        };
     } catch (error) {
         console.log("error from file upload " ,error);   
     }
