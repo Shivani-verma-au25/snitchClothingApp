@@ -56,8 +56,8 @@ export const addProductVariant = async ( productId ,  newProductVariant) =>{
     newFormData.append('title', newProductVariant.title);
     newFormData.append('description', newProductVariant.description);
     newFormData.append('stock', newProductVariant.stock);
-    newFormData.append('priceAmount' , newProductVariant.price.amount);
-    newFormData.append('priceCurrency', newProductVariant.price.currency);
+    newFormData.append('priceAmount' , newProductVariant.price?.amount);
+    newFormData.append('priceCurrency', newProductVariant.price?.currency);
     newFormData.append('attributes' , JSON.stringify(newProductVariant.attributes));
 
     const response = await productInstance.post(`/${productId}/add-variant`, newFormData);

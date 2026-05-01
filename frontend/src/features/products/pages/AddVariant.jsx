@@ -276,6 +276,8 @@ export default function AddVariant() {
 
             if (res?.success) {
                 toast.success(res.message || 'Variant created!');
+                console.log("payload",payload);
+                
                 navigate(`/seller/product/${productId}`);
             } else {
                 toast.error(res?.message || 'Failed to create variant');
@@ -445,8 +447,8 @@ export default function AddVariant() {
                                     min="0"
                                     step="1"
                                     placeholder="e.g. 100"
-                                    value={form.stocks}
-                                    onChange={e => setForm(p => ({ ...p, stocks: e.target.value }))}
+                                    value={form.stock}
+                                    onChange={e => setForm(p => ({ ...p, stock: e.target.value }))}
                                     className="w-full bg-transparent border-b border-[#cec5b9] pb-3 text-2xl font-light tracking-widest focus:outline-none focus:border-[#695d43] transition-colors placeholder:text-[#cec5b9] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 />
                                 <p className="text-[9px] text-[#7d766c] tracking-wide">

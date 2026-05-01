@@ -81,55 +81,89 @@ const SellerProductDetails = () => {
         fetchProductDetails();
     }, [productId]);
 
-    // const handleStockUpdate = async (variantId, newStock) => {
+    
+    // const handleAddVariant = async () => {
+    //     if (!newVariant.priceAmount || !newVariant.stocks) {
+    //         toast.error('Please fill required fields');
+    //         return;
+    //     }
     //     try {
-    //         const res = await handleUpdateVariantStock(productId, variantId, newStock);
+    //         // According to user request: priceAmount and priceCurrency are flat at top level.
+    //         // Converting images to URLs as currently implemented in typical Snitch workflow, 
+    //         // but including the files/data in the request.
+    //         const res = await handleCreateVariant(productId, {
+    //             priceAmount: parseFloat(newVariant.priceAmount),
+    //             priceCurrency: newVariant.priceCurrency,
+    //             stocks: parseInt(newVariant.stocks),
+    //             attributes: newVariant.attributes,
+    //             images: newVariant.images.map(img => img.url) // In a real scenario, these would be uploaded first or sent as FormData
+    //         });
+
     //         if (res?.success) {
-    //             toast.success('Stock updated');
+    //             toast.success('Variant added');
+    //             setShowAddForm(false);
+    //             setNewVariant({
+    //                 priceAmount: '',
+    //                 priceCurrency: 'INR',
+    //                 stocks: 0,
+    //                 attributes: { Size: '', Color: '' },
+    //                 images: []
+    //             });
     //             fetchProductDetails();
     //         } else {
-    //             toast.error(res?.message || 'Update failed');
+    //             toast.error(res?.message || 'Failed to add variant');
     //         }
     //     } catch (error) {
-    //         toast.error('Error updating stock');
+    //         toast.error('Error adding variant');
     //     }
     // };
 
-    const handleAddVariant = async () => {
-        if (!newVariant.priceAmount || !newVariant.stocks) {
-            toast.error('Please fill required fields');
-            return;
-        }
-        try {
-            // According to user request: priceAmount and priceCurrency are flat at top level.
-            // Converting images to URLs as currently implemented in typical Snitch workflow, 
-            // but including the files/data in the request.
-            const res = await handleCreateVariant(productId, {
-                priceAmount: parseFloat(newVariant.priceAmount),
-                priceCurrency: newVariant.priceCurrency,
-                stocks: parseInt(newVariant.stocks),
-                attributes: newVariant.attributes,
-                images: newVariant.images.map(img => img.url) // In a real scenario, these would be uploaded first or sent as FormData
+const handleAddVariant = async () => {
+    if (!newVariant.priceAmount || !newVariant.stocks) {
+        toast.error('Please fill required fields');
+        return;
+    }
+
+    try {
+        const data = new FormData();
+
+        data.append("priceAmount", newVariant.priceAmount);
+        data.append("priceCurrency", newVariant.priceCurrency);
+        data.append("stocks", newVariant.stocks);
+
+        // attributes (convert object → string)
+        data.append("attributes", JSON.stringify(newVariant.attributes));
+
+        // 🔥 SEND FILES (NOT URLS)
+        newVariant.images.forEach((img) => {
+            data.append("images", img.file);
+        });
+
+        const res = await handleCreateVariant(productId, data);
+
+        if (res?.success) {
+            toast.success('Variant added');
+            setShowAddForm(false);
+
+            setNewVariant({
+                priceAmount: '',
+                priceCurrency: 'INR',
+                stocks: 0,
+                attributes: { Size: '', Color: '' },
+                images: []
             });
 
-            if (res?.success) {
-                toast.success('Variant added');
-                setShowAddForm(false);
-                setNewVariant({
-                    priceAmount: '',
-                    priceCurrency: 'INR',
-                    stocks: 0,
-                    attributes: { Size: '', Color: '' },
-                    images: []
-                });
-                fetchProductDetails();
-            } else {
-                toast.error(res?.message || 'Failed to add variant');
-            }
-        } catch (error) {
-            toast.error('Error adding variant');
+            fetchProductDetails();
+        } else {
+            toast.error(res?.message || 'Failed to add variant');
         }
-    };
+    } catch (error) {
+        console.log(error);
+        toast.error('Error adding variant');
+    }
+};
+
+
 
     const handleAttributeChange = (key, value) => {
         setNewVariant(prev => ({

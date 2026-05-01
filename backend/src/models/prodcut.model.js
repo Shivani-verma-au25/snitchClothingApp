@@ -48,7 +48,7 @@ const productSchema = new Schema({
                     }
                 }
             ],
-                stocks:{
+                stock:{
                 type :Number,  
             },
             attributes : {

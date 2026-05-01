@@ -48,9 +48,6 @@ export const createProducts = asyncHandler(async (req, res) => {
     );
 });
 
-
-
-
 // get all created products by seller
 
 export const getProductCreatedBySeller = asyncHandler ( async ( req,res) => {
@@ -67,7 +64,6 @@ export const getProductCreatedBySeller = asyncHandler ( async ( req,res) => {
 
     return res.status(200).json( new ApiResponse( 200 , product ," Products fetched successfully."))
 });
-
 
 // get all products
 
@@ -106,28 +102,28 @@ export const getProductDetails = asyncHandler ( async ( req, res) => {
 
 export const addProductVariants = asyncHandler( async (req ,res) => {
     const {productId} = req.params;
-    const product = await productModel.findOne({
-        _id:product,
+    const product = await productModel.findById({
+        _id:productId,
         seller : req?.user._id
     });
 
     if(!product){
         return res.status(404).json( new ApiError(404 , "Product not found."))
     } ;
-
-
-
+   
     const files  = req.files;
     const images = [];
-    if (files || files?.length !== 0){
+    if (files || files.length !== 0){
        (await Promise.all(files.map( async (file) =>{
-        const image = await file.uploadFile({
+        const image = await uploadFile({
             buffer : file.buffer,
             fileName : file.originalname
         });
         return image;
        }))).map( image => images.push(image))
     };
+
+
 
     const price = req.body.priceAmount;
     const stock = req.body.stock;
@@ -136,6 +132,23 @@ export const addProductVariants = asyncHandler( async (req ,res) => {
     console.log("images" , images);
     console.log("stock" , stock);
     console.log("atri" , attributes);
-    
+
+
+    product.variants.push({
+        images,
+        price:{
+            amount:Number(price) || product.price?.amount,
+            currency:req.body.priceCurreny || product.price.currency
+        },
+        stock,
+        attributes
+    });
+
+    await product.save();
+    return res.status(200).json( new ApiResponse (
+        200,
+        product,
+        "Product Variant added successfully."
+    ))
 
 })

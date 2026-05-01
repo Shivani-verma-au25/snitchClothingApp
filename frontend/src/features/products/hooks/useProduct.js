@@ -6,28 +6,6 @@ export const useProducts = () =>{
 
     const dispatch = useDispatch()
 
-    // const handleCreateProduct = async (formData) =>{
-    //     dispatch(setProductLoading(true));
-    //     console.log("formdata" ,formData);
-        
-    //     try {
-    //         const res = await createProduct(formData);
-    //         console.log("res" ,res);
-            
-    //         if (res?.success) {
-    //             dispatch(setSellerProduct(res?.data))
-    //         }
-    //         return res;
-    //     } catch (error) {
-    //         console.log("Error while creating products in  hook" , error);
-    //         dispatch(setProductLoading(false))
-            
-    //     }finally{
-    //         dispatch(setProductLoading(false))
-    //     }
-
-    // };
-
 
     const handleCreateProduct = async (form) => {
             dispatch(setProductLoading(true));
