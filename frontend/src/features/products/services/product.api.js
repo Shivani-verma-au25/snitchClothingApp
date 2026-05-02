@@ -27,22 +27,10 @@ export const getAllProducts = async () =>{
 }
 
 
-export const getroductDetails = async (productId) =>{
+export const getProductDetails = async (productId) =>{
     const response = await productInstance.get(`/product-detail/${productId}`);
     return response.data;
 }
-
-// // create variant
-// export const createVariant = async (productId, variantData) => {
-//     const response = await productInstance.post(`/${productId}/variants`, variantData);
-//     return response.data;
-// };
-
-// // update stock
-// export const updateVariantStock = async (productId, variantId, stocks) => {
-//     const response = await productInstance.patch(`/${productId}/variants/${variantId}/stock`, { stocks });
-//     return response.data;
-// };
 
 
 // create variant
